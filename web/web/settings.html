@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置</title>
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            /* 确保外边距为 0 */
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 4%;
+            background-color: #333;
+            height: 120vh;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .sidebar:hover {
+            width: 10%;
+        }
+
+        .sidebar a {
+            background: none;
+            border: none;
+            color: white;
+            margin: 10px 0;
+            cursor: pointer;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-decoration: none;
+            /* 去除链接下划线 */
+        }
+
+        .sidebar:hover a {
+            opacity: 1;
+        }
+
+        .main-content {
+            width: 96%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar:hover+.main-content {
+            width: 90%;
+        }
+
+        #current-time {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .settings-item {
+            font-size: 24px;
+            color: #666;
+            margin: 30px 30px 30px 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <!-- 将按钮替换为链接 -->
+        <a href="main.html">主界面</a>
+        <a href="heart_rate.html">心率</a>
+        <a href="activity_intensity.html">活动强度</a>
+        <a href="sleep.html">睡眠</a>
+        <a href="settings.html">设置</a>
+    </div>
+    <div class="main-content">
+        <h1>设置页面</h1>
+        <div class="settings-item">1. 系统设置</div>
+        <div class="settings-item">2. 用户设置</div>
+        <div class="settings-item">3. 设备设置</div>
+        <div class="settings-item">4. 通知设置</div>
+        <div class="settings-item">5. 隐私设置</div>
+        <div id="current-time"></div>
+        <div style="font-size: 24px; color: #000000; margin: 30px 30px 30px 30px;">正在开发 敬请期待！</div>
+    </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const timeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // 页面加载时更新时间
+        updateTime();
+        // 每秒更新一次时间
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+
+</html>

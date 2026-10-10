@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心率</title>
+    <style>
+        /* 添加页面加载动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            animation: fadeIn 1s ease-in-out;
+            /* 添加页面加载动画 */
+        }
+
+        .sidebar {
+            width: 4%;
+            background-color: #333;
+            height: 120vh;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        .sidebar:hover {
+            width: 10%;
+        }
+
+        .sidebar button {
+            background: none;
+            border: none;
+            color: white;
+            margin: 10px 0;
+            cursor: pointer;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar:hover button {
+            opacity: 1;
+        }
+
+        .main-content {
+            width: 96%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar:hover+.main-content {
+            width: 90%;
+        }
+
+        #current-time {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* 确认图片按钮样式一致 */
+        .image-button {
+            width: 500px;
+            height: 300px;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .image-button:hover {
+            transform: scale(1.1);
+            /* 鼠标悬停时放大 1.1 倍 */
+            opacity: 0.7;
+        }
+
+        .image-button.enlarged {
+            transform: scale(2);
+        }
+
+        /* 添加四宫格容器样式 */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 500px);
+            gap: 20px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        /* 添加图片按钮悬停动效 */
+        .image-button {
+            transition: opacity 0.3s ease;
+        }
+
+        .image-button:hover {
+            opacity: 0.7;
+        }
+
+        /* 添加文本显示区域样式 */
+        .text-display {
+            display: none;
+            background-color: #f0f0f0;
+            padding: 20px;
+            width: 300px;
+            height: 300px;
+            overflow-y: auto;
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <!-- 使用 <a> 标签包裹按钮实现跳转 -->
+        <a href="main.html" style="text-decoration: none;">
+            <button>主界面</button>
+        </a>
+        <a href="heart_rate.html" style="text-decoration: none;">
+            <button>心率</button>
+        </a>
+        <a href="activity_intensity.html" style="text-decoration: none;">
+            <button>活动强度</button>
+        </a>
+        <a href="sleep.html" style="text-decoration: none;">
+            <button>睡眠</button>
+        </a>
+        <a href="settings.html" style="text-decoration: none;">
+            <button>设置</button>
+        </a>
+    </div>
+    <div class="main-content">
+        <p style="font-size: 48px; font-weight: bold; text-align: center;">小 腕 智 能 穿 戴 设 备 分 析 系 统</p>
+        <h1>心率页面</h1>
+        <!-- <div id="current-time"></div> -->
+        <!-- 添加文本显示区域 -->
+        <div class="text-display" id="textDisplay"></div>
+        <!-- 减少一个图片按钮 -->
+        <div class="image-grid">
+            <img src="himage1.png" alt="图片1" class="image-button">
+            <img src="himage2.png" alt="图片2" class="image-button">
+            <img src="himage3.png" alt="图片3" class="image-button">
+            <img src="himage4.png" alt="图片4" class="image-button">
+            <!-- 移除了最后一个图片按钮 -->
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const timeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            const currentTimeElement = document.getElementById('current-time');
+            if (currentTimeElement) {
+                currentTimeElement.textContent = timeString;
+            }
+        }
+
+        // 页面加载时更新时间
+        updateTime();
+        // 每秒更新一次时间
+        setInterval(updateTime, 1000);
+
+        const texts = [
+            "志愿者心率监测图",
+            "一位志愿者bpm和时间的统计散点图 （时间在4085.99）之间，横轴：标准化时间（分钟） 纵轴：实时心率值 颜色分级：绿（正常）、黄（注意）、红（警告） 结论：清晨时段（300-500分钟）出现密集黄色预警，可能与晨间活动（如运动）相关。",
+            "五维指标：平均心率、最小心率、最大心率、HRV、静息心率 灰色扇形：群体25%-75%分位数区间 红色实线：目标用户数据 结论：用户最大心率（161bpm）超过群体75分位，提示运动强度偏高，需排查潜在风险。",
+            "交互式悬停热力图（Heatmap with Hover Interaction），结合颜色编码与动态数据标签分析，我们发现某一时段大部分志愿者呈现红色（如晚21:00-23:00），可能暗示夜间活动/压力导致群体性心率上升；还发现若个别志愿者在全时段持续偏红，需警惕其心血管异常（如长期高静息心率）；某一小时窗口内心率突然升高（如从绿色跳变为红色），可能与睡眠呼吸暂停相关。运动结束后的时间段显示持续高心率（非红色→缓慢变蓝），提示心肺功能需优化。该图可以实现多用户对比；横向对比：快速定位某一时间段内全体用户的心率共性（如午休时段普遍低心率）。纵向追踪：观察单个用户的昼夜节律是否偏离群体模式（如夜班工作者异于常态）。"
+        ];
+
+        const imageButtons = document.querySelectorAll('.image-button');
+        const textDisplay = document.getElementById('textDisplay');
+
+        imageButtons.forEach((button, index) => {
+            // 添加鼠标悬停事件
+            button.addEventListener('mouseover', () => {
+                if (textDisplay) {
+                    textDisplay.textContent = texts[index];
+                    textDisplay.style.display = 'block';
+                }
+            });
+
+            // 添加鼠标移出事件
+            button.addEventListener('mouseout', () => {
+                if (textDisplay) {
+                    textDisplay.style.display = 'none';
+                }
+            });
+
+            // 保留点击事件
+            button.addEventListener('click', () => {
+                button.classList.toggle('enlarged');
+                textDisplay.textContent = texts[index];
+                textDisplay.style.display = 'block';
+            });
+        });
+
+        // 点击页面其他区域隐藏文本显示区域
+        document.addEventListener('click', (event) => {
+            if (!event.target.classList.contains('image-button')) {
+                textDisplay.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
